@@ -1,2 +1,0 @@
-# university-management-system
-TIU
