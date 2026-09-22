@@ -1,1 +1,1923 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>University Management System</title>
 
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial,sans-serif;
+}
+
+body{
+  background:#f4f6f9;
+  color:#172033;
+}
+
+button{
+  cursor:pointer;
+  border:0;
+}
+
+input,select,textarea{
+  font:inherit;
+}
+
+#loginPage{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+  background:linear-gradient(135deg,#111827,#1e3a8a);
+}
+
+.login-box{
+  width:100%;
+  max-width:420px;
+  background:#fff;
+  padding:35px;
+  border-radius:20px;
+  box-shadow:0 20px 50px rgba(0,0,0,.25);
+}
+
+.logo{
+  width:65px;
+  height:65px;
+  margin:0 auto 20px;
+  border-radius:16px;
+  background:#2563eb;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:26px;
+  font-weight:bold;
+}
+
+.login-box h1{
+  text-align:center;
+  margin-bottom:8px;
+}
+
+.login-box>p{
+  text-align:center;
+  color:#6b7280;
+  margin-bottom:28px;
+}
+
+.input-group{
+  margin-bottom:18px;
+}
+
+.input-group label{
+  display:block;
+  margin-bottom:7px;
+  font-weight:600;
+}
+
+.input-group input{
+  width:100%;
+  padding:13px;
+  border:1px solid #d1d5db;
+  border-radius:10px;
+  outline:none;
+}
+
+.input-group input:focus{
+  border-color:#2563eb;
+}
+
+.login-btn{
+  width:100%;
+  padding:14px;
+  border-radius:10px;
+  background:#2563eb;
+  color:white;
+  font-size:16px;
+  font-weight:bold;
+}
+
+.demo{
+  margin-top:18px;
+  padding:12px;
+  background:#eff6ff;
+  border-radius:10px;
+  font-size:13px;
+  color:#1e40af;
+}
+
+.error{
+  display:none;
+  color:#dc2626;
+  text-align:center;
+  margin-bottom:15px;
+}
+
+/* APP */
+
+#app{
+  display:none;
+  min-height:100vh;
+}
+
+.sidebar{
+  position:fixed;
+  left:0;
+  top:0;
+  width:250px;
+  height:100vh;
+  background:#111827;
+  color:white;
+  padding:22px 15px;
+  z-index:20;
+  overflow-y:auto;
+}
+
+.brand{
+  font-size:21px;
+  font-weight:bold;
+  padding:10px 12px 25px;
+}
+
+.brand span{
+  color:#60a5fa;
+}
+
+.menu-title{
+  color:#9ca3af;
+  font-size:11px;
+  margin:15px 12px 8px;
+  text-transform:uppercase;
+}
+
+.menu button{
+  width:100%;
+  padding:13px;
+  margin-bottom:4px;
+  background:transparent;
+  color:#d1d5db;
+  text-align:left;
+  border-radius:9px;
+  font-size:14px;
+}
+
+.menu button:hover,
+.menu button.active{
+  background:#1d4ed8;
+  color:white;
+}
+
+.logout{
+  position:absolute;
+  bottom:20px;
+  left:15px;
+  width:calc(100% - 30px);
+  padding:12px;
+  background:#374151;
+  color:white;
+  border-radius:9px;
+}
+
+.main{
+  margin-left:250px;
+  min-height:100vh;
+}
+
+.topbar{
+  height:70px;
+  background:white;
+  border-bottom:1px solid #e5e7eb;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:0 30px;
+}
+
+.topbar h2{
+  font-size:20px;
+}
+
+.user{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.avatar{
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  background:#2563eb;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+}
+
+.content{
+  padding:30px;
+}
+
+.page{
+  display:none;
+}
+
+.page.active{
+  display:block;
+}
+
+/* DASHBOARD */
+
+.welcome{
+  margin-bottom:25px;
+}
+
+.welcome h1{
+  font-size:28px;
+  margin-bottom:5px;
+}
+
+.welcome p,
+.page-header p{
+  color:#6b7280;
+}
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:18px;
+  margin-bottom:25px;
+}
+
+.card{
+  background:white;
+  padding:22px;
+  border-radius:15px;
+  border:1px solid #e5e7eb;
+}
+
+.card-title{
+  color:#6b7280;
+  font-size:13px;
+  margin-bottom:10px;
+}
+
+.card-number{
+  font-size:28px;
+  font-weight:bold;
+}
+
+.dashboard-grid{
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:20px;
+}
+
+.panel{
+  background:white;
+  padding:22px;
+  border-radius:15px;
+  border:1px solid #e5e7eb;
+}
+
+.panel h3{
+  margin-bottom:18px;
+}
+
+/* TABLE */
+
+.table-container{
+  background:white;
+  border-radius:15px;
+  border:1px solid #e5e7eb;
+  overflow-x:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:700px;
+}
+
+th,td{
+  padding:14px;
+  text-align:left;
+  border-bottom:1px solid #e5e7eb;
+}
+
+th{
+  background:#f9fafb;
+  font-size:13px;
+}
+
+td{
+  font-size:14px;
+}
+
+.status{
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:bold;
+}
+
+.present{
+  background:#dcfce7;
+  color:#166534;
+}
+
+.absent{
+  background:#fee2e2;
+  color:#991b1b;
+}
+
+.late{
+  background:#fef3c7;
+  color:#92400e;
+}
+
+.info{
+  background:#dbeafe;
+  color:#1e40af;
+}
+
+/* BUTTONS */
+
+.page-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+  gap:15px;
+}
+
+.primary-btn{
+  background:#2563eb;
+  color:white;
+  padding:11px 17px;
+  border-radius:9px;
+  font-weight:bold;
+}
+
+.secondary-btn{
+  background:#e5e7eb;
+  color:#172033;
+  padding:9px 13px;
+  border-radius:8px;
+}
+
+.danger-btn{
+  background:#fee2e2;
+  color:#991b1b;
+  padding:8px 11px;
+  border-radius:7px;
+}
+
+.small-btn{
+  padding:7px 10px;
+  border-radius:7px;
+  font-size:12px;
+  margin:2px;
+}
+
+/* FILTERS */
+
+.filters{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:18px;
+}
+
+.filters input,
+.filters select,
+.attendance-actions input,
+.attendance-actions select{
+  padding:11px;
+  border:1px solid #d1d5db;
+  border-radius:9px;
+  background:white;
+}
+
+/* ATTENDANCE */
+
+.attendance-actions{
+  display:flex;
+  gap:10px;
+  margin-bottom:20px;
+  flex-wrap:wrap;
+}
+
+.attendance-btn{
+  padding:7px 10px;
+  border-radius:7px;
+  margin:2px;
+  font-size:12px;
+}
+
+.btn-present{
+  background:#dcfce7;
+  color:#166534;
+}
+
+.btn-absent{
+  background:#fee2e2;
+  color:#991b1b;
+}
+
+.btn-late{
+  background:#fef3c7;
+  color:#92400e;
+}
+
+/* MODAL */
+
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  z-index:50;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modal-box{
+  width:100%;
+  max-width:600px;
+  max-height:90vh;
+  overflow:auto;
+  background:white;
+  border-radius:15px;
+  padding:24px;
+}
+
+.modal-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.close{
+  background:transparent;
+  font-size:25px;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.form-group{
+  margin-bottom:13px;
+}
+
+.form-group.full{
+  grid-column:1/-1;
+}
+
+.form-group label{
+  display:block;
+  font-weight:bold;
+  font-size:13px;
+  margin-bottom:6px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea{
+  width:100%;
+  padding:10px;
+  border:1px solid #d1d5db;
+  border-radius:8px;
+}
+
+.form-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:10px;
+  margin-top:18px;
+}
+
+.notification{
+  padding:15px;
+  border:1px solid #e5e7eb;
+  border-radius:10px;
+  margin-bottom:10px;
+  background:white;
+}
+
+.notification.unread{
+  border-left:4px solid #2563eb;
+  background:#eff6ff;
+}
+
+.setting-box{
+  background:white;
+  border:1px solid #e5e7eb;
+  border-radius:15px;
+  padding:22px;
+  margin-bottom:18px;
+}
+
+.setting-box h3{
+  margin-bottom:15px;
+}
+
+.empty{
+  text-align:center;
+  color:#6b7280;
+  padding:30px;
+}
+
+.mobile-menu{
+  display:none;
+  background:#111827;
+  color:white;
+  padding:10px 15px;
+  font-size:20px;
+}
+
+@media(max-width:1000px){
+  .cards{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .dashboard-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:700px){
+  .sidebar{
+    transform:translateX(-100%);
+    transition:.25s;
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    margin-left:0;
+  }
+
+  .mobile-menu{
+    display:block;
+  }
+
+  .topbar{
+    padding:0 15px;
+  }
+
+  .content{
+    padding:18px;
+  }
+
+  .cards{
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+
+  .card{
+    padding:16px;
+  }
+
+  .card-number{
+    font-size:23px;
+  }
+
+  .welcome h1{
+    font-size:23px;
+  }
+
+  .page-header{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .logout{
+    position:static;
+    margin-top:20px;
+    width:100%;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="loginPage">
+
+  <div class="login-box">
+
+    <div class="logo">U</div>
+
+    <h1>University Portal</h1>
+
+    <p>Management & Attendance System</p>
+
+    <div id="loginError" class="error">
+      Username yoki PIN noto‘g‘ri
+    </div>
+
+    <div class="input-group">
+      <label>Username</label>
+      <input id="username" type="text" placeholder="Username">
+    </div>
+
+    <div class="input-group">
+      <label>PIN</label>
+      <input id="pin" type="password" maxlength="6" placeholder="PIN">
+    </div>
+
+    <button class="login-btn" onclick="login()">
+      Login
+    </button>
+
+    <div class="demo">
+      Demo Admin:<br>
+      Username: <b>admin</b><br>
+      PIN: <b>123456</b>
+    </div>
+
+  </div>
+
+</div>
+
+<div id="app">
+
+  <aside class="sidebar" id="sidebar">
+
+    <div class="brand">
+      UNIVERSITY <span>PORTAL</span>
+    </div>
+
+    <div class="menu-title">Main</div>
+
+    <div class="menu">
+
+      <button class="active"
+        onclick="showPage('dashboard',this)">
+        🏠 Dashboard
+      </button>
+
+      <button class="admin-only"
+        onclick="showPage('staff',this)">
+        👨‍🏫 Staff
+      </button>
+
+      <button class="admin-only"
+        onclick="showPage('faculties',this)">
+        🏛️ Faculties
+      </button>
+
+      <button class="admin-only"
+        onclick="showPage('departments',this)">
+        📚 Departments
+      </button>
+
+      <button onclick="showPage('groups',this)">
+        👥 Groups
+      </button>
+
+      <button onclick="showPage('students',this)">
+        🎓 Students
+      </button>
+
+      <button onclick="showPage('attendance',this)">
+        ✅ Attendance
+      </button>
+
+      <button onclick="showPage('history',this)">
+        📅 Attendance History
+      </button>
+
+      <div class="menu-title">System</div>
+
+      <button onclick="showPage('notifications',this)">
+        🔔 Notifications
+      </button>
+
+      <button onclick="showPage('settings',this)">
+        ⚙️ Settings
+      </button>
+
+    </div>
+
+    <button class="logout" onclick="logout()">
+      🚪 Logout
+    </button>
+
+  </aside>
+
+  <main class="main">
+
+    <div class="mobile-menu" onclick="toggleSidebar()">
+      ☰
+    </div>
+
+    <header class="topbar">
+
+      <h2 id="pageTitle">
+        Dashboard
+      </h2>
+
+      <div class="user">
+
+        <div>
+          <b id="userName">Admin</b>
+          <br>
+          <small id="userRole">Administrator</small>
+        </div>
+
+        <div class="avatar" id="avatar">
+          A
+        </div>
+
+      </div>
+
+    </header>
+
+    <div class="content">
+
+      <section id="dashboard" class="page active">
+
+        <div class="welcome">
+
+          <h1 id="welcomeTitle">
+            Welcome back, Admin 👋
+          </h1>
+
+          <p>
+            University management system dashboard
+          </p>
+
+        </div>
+
+        <div class="cards">
+
+          <div class="card">
+            <div class="card-title">
+              Total Students
+            </div>
+            <div class="card-number" id="studentCount">
+              0
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">
+              Staff
+            </div>
+            <div class="card-number" id="staffCount">
+              0
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">
+              Groups
+            </div>
+            <div class="card-number" id="groupCount">
+              0
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">
+              Today's Attendance
+            </div>
+            <div class="card-number" id="attendancePercent">
+              0%
+            </div>
+          </div>
+
+        </div>
+
+        <div class="dashboard-grid">
+
+          <div class="panel">
+
+            <h3>Today's Attendance</h3>
+
+            <div class="table-container">
+
+              <table>
+
+                <thead>
+                  <tr>
+                    <th>Student</th>
+                    <th>Group</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+
+                <tbody id="dashboardAttendance">
+                </tbody>
+
+              </table>
+
+            </div>
+
+          </div>
+
+          <div class="panel">
+
+            <h3>Quick Information</h3>
+
+            <p id="quickInfo"></p>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <section id="staff" class="page">
+
+        <div class="page-header">
+
+          <div>
+            <h1>Staff</h1>
+            <p>University staff management</p>
+          </div>
+
+          <button class="primary-btn"
+            onclick="openStaffModal()">
+            + Add Staff
+          </button>
+
+        </div>
+
+        <div class="filters">
+
+          <input
+            id="staffSearch"
+            placeholder="Search staff..."
+            oninput="renderStaff()">
+
+        </div>
+
+        <div class="table-container">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Faculty</th>
+                <th>Department</th>
+                <th>Position</th>
+                <th>Groups</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+
+            <tbody id="staffTable"></tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+      <section id="faculties" class="page">
+
+        <div class="page-header">
+
+          <div>
+            <h1>Faculties</h1>
+            <p>Faculty management</p>
+          </div>
+
+          <button class="primary-btn"
+            onclick="openSimpleModal('faculty')">
+            + Add Faculty
+          </button>
+
+        </div>
+
+        <div class="table-container">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Departments</th>
+                <th>Students</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+
+            <tbody id="facultyTable"></tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+      <section id="departments" class="page">
+
+        <div class="page-header">
+
+          <div>
+            <h1>Departments</h1>
+            <p>Department management</p>
+          </div>
+
+          <button class="primary-btn"
+            onclick="openSimpleModal('department')">
+            + Add Department
+          </button>
+
+        </div>
+
+        <div class="filters">
+
+          <select
+            id="departmentFacultyFilter"
+            onchange="renderDepartments()">
+
+            <option value="">
+              All faculties
+            </option>
+
+          </select>
+
+        </div>
+
+        <div class="table-container">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Faculty</th>
+                <th>Groups</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+
+            <tbody id="departmentTable"></tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+      <section id="groups" class="page">
+
+        <div class="page-header">
+
+          <div>
+            <h1>Groups</h1>
+            <p>Student groups</p>
+          </div>
+
+          <button class="primary-btn admin-only"
+            onclick="openGroupModal()">
+            + Add Group
+          </button>
+
+        </div>
+
+        <div class="filters">
+
+          <input
+            id="groupSearch"
+            placeholder="Search groups..."
+            oninput="renderGroups()">
+
+          <select
+            id="groupFacultyFilter"
+            onchange="renderGroups()">
+
+            <option value="">
+              All faculties
+            </option>
+
+          </select>
+
+        </div>
+
+        <div class="table-container">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>Group</th>
+                <th>Faculty</th>
+                <th>Department</th>
+                <th>Students</th>
+                <th>Staff</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+
+            <tbody id="groupTable"></tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+      <section id="students" class="page">
+
+        <div class="page-header">
+
+          <div>
+            <h1>Students</h1>
+            <p>University student database</p>
+          </div>
+
+          <button class="primary-btn admin-only"
+            onclick="openStudentModal()">
+            + Add Student
+          </button>
+
+        </div>
+
+        <div class="filters">
+
+          <input
+            id="studentSearch"
+            placeholder="Search students..."
+            oninput="renderStudents()">
+
+          <select
+            id="studentFacultyFilter"
+            onchange="renderStudents()">
+
+            <option value="">
+              All faculties
+            </option>
+
+          </select>
+
+          <select
+            id="studentGroupFilter"
+            onchange="renderStudents()">
+
+            <option value="">
+              All groups
+            </option>
+
+          </select>
+
+        </div>
+
+        <div class="table-container">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Student ID</th>
+                <th>Faculty</th>
+                <th>Department</th>
+                <th>Group</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+
+            <tbody id="studentTable"></tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+      <section id="attendance" class="page">
+
+        <div class="page-header">
+
+          <div>
+            <h1>Attendance</h1>
+            <p>Mark attendance for assigned groups</p>
+          </div>
+
+        </div>
+
+        <div class="attendance-actions">
+
+          <select
+            id="attendanceFaculty"
+            onchange="updateAttendanceFilters()">
+
+            <option value="">
+              Select faculty
+            </option>
+
+          </select>
+
+          <select
+            id="attendanceDepartment"
+            onchange="updateAttendanceFilters()">
+
+            <option value="">
+              Select department
+            </option>
+
+          </select>
+
+          <select
+            id="attendanceGroup"
+            onchange="renderAttendance()">
+
+            <option value="">
+              Select group
+            </option>
+
+          </select>
+
+          <input
+            type="date"
+            id="attendanceDate"
+            onchange="renderAttendance()">
+
+        </div>
+
+        <div class="table-container">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>Student</th>
+                <th>Student ID</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+
+            <tbody id="attendanceTable"></tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+      <section id="history" class="page">
+
+        <div class="page-header">
+
+          <div>
+            <h1>Attendance History</h1>
+            <p>Previous attendance records</p>
+          </div>
+
+        </div>
+
+        <div class="filters">
+
+          <input
+            type="date"
+            id="historyDate"
+            onchange="renderHistory()">
+
+          <select
+            id="historyFaculty"
+            onchange="updateHistoryFilters()">
+
+            <option value="">
+              All faculties
+            </option>
+
+          </select>
+
+          <select
+            id="historyDepartment"
+            onchange="updateHistoryFilters()">
+
+            <option value="">
+              All departments
+            </option>
+
+          </select>
+
+          <select
+            id="historyGroup"
+            onchange="renderHistory()">
+
+            <option value="">
+              All <option value="">All statuses</option>
+<option value="Present">Present</option>
+<option value="Absent">Absent</option>
+<option value="Late">Late</option>
+</select>
+
+</div>
+
+<div class="table-container">
+
+<table>
+
+<thead>
+<tr>
+<th>Date</th>
+<th>Student</th>
+<th>Group</th>
+<th>Status</th>
+<th>Marked By</th>
+</tr>
+</thead>
+
+<tbody id="historyTable">
+
+<tr>
+<td>2026-09-22</td>
+<td>Ali Karimov</td>
+<td>LAW-101</td>
+<td>
+<span class="status present">Present</span>
+</td>
+<td>Javohir Ergashev</td>
+</tr>
+
+<tr>
+<td>2026-09-22</td>
+<td>Madina Aliyeva</td>
+<td>LAW-101</td>
+<td>
+<span class="status late">Late</span>
+</td>
+<td>Javohir Ergashev</td>
+</tr>
+
+<tr>
+<td>2026-09-22</td>
+<td>Jasur Abdullayev</td>
+<td>LAW-102</td>
+<td>
+<span class="status absent">Absent</span>
+</td>
+<td>Javohir Ergashev</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</section>
+
+
+<!-- NOTIFICATIONS -->
+
+<section id="notifications" class="page">
+
+<div class="page-header">
+
+<div>
+<h1>Notifications</h1>
+<p>University announcements and alerts</p>
+</div>
+
+<button class="primary-btn" onclick="addNotification()">
++ Add Notification
+</button>
+
+</div>
+
+<div id="notificationList">
+
+<div class="notification unread">
+
+<h3>Welcome</h3>
+
+<p>
+Welcome to the University Management System.
+</p>
+
+<small>
+2026-09-22
+</small>
+
+</div>
+
+<div class="notification">
+
+<h3>Attendance Reminder</h3>
+
+<p>
+Please make sure today's attendance is completed.
+</p>
+
+<small>
+2026-09-22
+</small>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- SETTINGS -->
+
+<section id="settings" class="page">
+
+<div class="page-header">
+
+<div>
+<h1>Settings</h1>
+<p>System preferences</p>
+</div>
+
+</div>
+
+<div class="panel">
+
+<h3>University Information</h3>
+
+<div class="input-group">
+
+<label>University Name</label>
+
+<input
+type="text"
+id="universityName"
+value="University Portal"
+>
+
+</div>
+
+<div class="input-group">
+
+<label>Academic Year</label>
+
+<input
+type="text"
+id="academicYear"
+value="2026–2027"
+>
+
+</div>
+
+<div class="input-group">
+
+<label>Current Semester</label>
+
+<select id="semester">
+
+<option value="1">Semester 1</option>
+<option value="2">Semester 2</option>
+
+</select>
+
+</div>
+
+<button
+class="primary-btn"
+onclick="saveSettings()"
+>
+Save Settings
+</button>
+
+</div>
+
+<br>
+
+<div class="panel">
+
+<h3>Account</h3>
+
+<p>
+Logged in as:
+<strong id="settingsUser">Admin</strong>
+</p>
+
+<br>
+
+<button
+class="secondary-btn"
+onclick="logout()"
+>
+Logout
+</button>
+
+</div>
+
+</section>
+
+</div>
+
+</main>
+
+</div>
+
+
+<!-- MODAL -->
+
+<div
+class="modal"
+id="modal"
+style="
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.55);
+z-index:100;
+align-items:center;
+justify-content:center;
+padding:20px;
+">
+
+<div
+class="modal-box"
+style="
+background:white;
+border-radius:15px;
+width:100%;
+max-width:550px;
+padding:25px;
+">
+
+<div
+style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+">
+
+<h2 id="modalTitle">
+Form
+</h2>
+
+<button
+onclick="closeModal()"
+style="
+background:none;
+font-size:25px;
+"
+>
+×
+</button>
+
+</div>
+
+<form id="modalForm">
+
+<div id="modalBody"></div>
+
+<div
+style="
+display:flex;
+justify-content:flex-end;
+gap:10px;
+margin-top:20px;
+">
+
+<button
+type="button"
+class="secondary-btn"
+onclick="closeModal()"
+>
+Cancel
+</button>
+
+<button
+type="submit"
+class="primary-btn"
+>
+Save
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+
+<script>
+
+const users = [
+
+{
+id: "u1",
+name: "Admin User",
+username: "admin",
+pin: "123456",
+role: "Admin",
+faculty: "",
+department: "",
+position: "Administrator",
+groups: [],
+active: true
+},
+
+{
+id: "u2",
+name: "Javohir Ergashev",
+username: "javohir",
+pin: "111111",
+role: "Staff",
+faculty: "Law",
+department: "Legal Studies",
+position: "Lecturer",
+groups: ["LAW-101"],
+active: true
+}
+
+];
+
+
+const faculties = [
+
+"Law",
+"English"
+
+];
+
+
+const departments = [
+
+{
+id: "d1",
+name: "Legal Studies",
+faculty: "Law"
+},
+
+{
+id: "d2",
+name: "Foreign Languages",
+faculty: "English"
+}
+
+];
+
+
+const groups = [
+
+{
+id: "g1",
+name: "LAW-101",
+faculty: "Law",
+department: "Legal Studies",
+staff: "Javohir Ergashev"
+},
+
+{
+id: "g2",
+name: "LAW-102",
+faculty: "Law",
+department: "Legal Studies",
+staff: "Aziza Karimova"
+},
+
+{
+id: "g3",
+name: "ENG-201",
+faculty: "English",
+department: "Foreign Languages",
+staff: "Malika Sobirova"
+}
+
+];
+
+
+const students = [
+
+{
+id: "s1",
+name: "Ali Karimov",
+studentId: "ST-1001",
+faculty: "Law",
+department: "Legal Studies",
+group: "LAW-101",
+active: true
+},
+
+{
+id: "s2",
+name: "Madina Aliyeva",
+studentId: "ST-1002",
+faculty: "Law",
+department: "Legal Studies",
+group: "LAW-101",
+active: true
+},
+
+{
+id: "s3",
+name: "Jasur Abdullayev",
+studentId: "ST-1003",
+faculty: "Law",
+department: "Legal Studies",
+group: "LAW-102",
+active: true
+}
+
+];
+
+
+let attendance = [];
+
+let currentUser = null;
+
+
+function login(){
+
+const username =
+document.getElementById("username").value.trim();
+
+const pin =
+document.getElementById("pin").value.trim();
+
+const user =
+users.find(
+u =>
+u.username === username &&
+u.pin === pin &&
+u.active
+);
+
+if(!user){
+
+document.getElementById("loginError").style.display =
+"block";
+
+return;
+
+}
+
+currentUser = user;
+
+document.getElementById("loginPage").style.display =
+"none";
+
+document.getElementById("app").style.display =
+"block";
+
+document.getElementById("userName").textContent =
+user.name;
+
+document.getElementById("userRole").textContent =
+user.role === "Admin"
+? "Administrator"
+: "Staff";
+
+document.getElementById("settingsUser").textContent =
+user.username;
+
+renderAll();
+
+}
+
+
+function logout(){
+
+currentUser = null;
+
+document.getElementById("app").style.display =
+"none";
+
+document.getElementById("loginPage").style.display =
+"flex";
+
+}
+
+
+function showPage(page, button){
+
+document
+.querySelectorAll(".page")
+.forEach(p =>
+p.classList.remove("active")
+);
+
+document
+.getElementById(page)
+.classList.add("active");
+
+
+document
+.querySelectorAll(".menu button")
+.forEach(b =>
+b.classList.remove("active")
+);
+
+button.classList.add("active");
+
+
+document.getElementById("pageTitle").textContent =
+button.textContent.trim();
+
+}
+
+
+function toggleSidebar(){
+
+document
+.getElementById("sidebar")
+.classList.toggle("open");
+
+}
+
+
+function setAttendance(statusId, status){
+
+const element =
+document.getElementById(statusId);
+
+element.textContent = status;
+
+element.className =
+"status " +
+status.toLowerCase();
+
+}
+
+
+function addStaff(){
+
+const name =
+prompt("Staff name:");
+
+if(!name) return;
+
+const username =
+prompt("Username:");
+
+if(!username) return;
+
+const pin =
+prompt("PIN:");
+
+if(!pin) return;
+
+users.push({
+
+id: "u" + Date.now(),
+
+name:name,
+
+username:username,
+
+pin:pin,
+
+role:"Staff",
+
+faculty:"Law",
+
+department:"Legal Studies",
+
+position:"Lecturer",
+
+groups:[],
+
+active:true
+
+});
+
+alert("Staff added successfully.");
+
+}
+
+
+function addGroup(){
+
+const name =
+prompt("Group name:");
+
+if(!name) return;
+
+groups.push({
+
+id:"g"+Date.now(),
+
+name:name,
+
+faculty:"Law",
+
+department:"Legal Studies",
+
+staff:""
+
+});
+
+alert("Group added successfully.");
+
+}
+
+
+function addStudent(){
+
+const name =
+prompt("Student name:");
+
+if(!name) return;
+
+const studentId =
+prompt("Student ID:");
+
+if(!studentId) return;
+
+students.push({
+
+id:"s"+Date.now(),
+
+name:name,
+
+studentId:studentId,
+
+faculty:"Law",
+
+department:"Legal Studies",
+
+group:"LAW-101",
+
+active:true
+
+});
+
+alert("Student added successfully.");
+
+}
+
+
+function saveSettings(){
+
+const university =
+document.getElementById("universityName").value;
+
+const year =
+document.getElementById("academicYear").value;
+
+const semester =
+document.getElementById("semester").value;
+
+alert(
+"Settings saved successfully."
+);
+
+}
+
+
+document
+.getElementById("attendanceDate")
+.value =
+new Date()
+.toISOString()
+.slice(0,10);
+
+
+function renderAll(){
+
+document.getElementById("studentCount")
+.textContent =
+students.length;
+
+document.getElementById("staffCount")
+.textContent =
+users.length;
+
+document.getElementById("groupCount")
+.textContent =
+groups.length;
+
+}
+
+
+</script>
+
+</body>
+  </html>
